@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1300" viewBox="0 0 1680 1300" role="img" aria-labelledby="title desc">
+  <title id="title">站点重复识别与深扫收敛逻辑图</title>
+  <desc id="desc">展示站点重复识别脚本从输入、逐站探测、非业务响应页优先处理、标准入口合并到输出结果的整体流程。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4b5563"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .panel-title { font: 700 28px 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; fill: #0f172a; }
+      .panel-note { font: 400 16px 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; fill: #475569; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 18; filter: url(#shadow); }
+      .box-blue { fill: #eef6ff; stroke: #60a5fa; }
+      .box-green { fill: #ecfdf5; stroke: #34d399; }
+      .box-orange { fill: #fff7ed; stroke: #fb923c; }
+      .box-purple { fill: #f5f3ff; stroke: #a78bfa; }
+      .box-red { fill: #fef2f2; stroke: #f87171; }
+      .box-slate { fill: #f8fafc; stroke: #94a3b8; }
+      .box-title { font: 700 22px 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; fill: #0f172a; }
+      .box-text { font: 400 16px 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; fill: #334155; }
+      .small-text { font: 400 15px 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; fill: #475569; }
+      .arrow { stroke: #4b5563; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 8 8; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1680" height="1300"/>
+
+  <text x="840" y="58" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, Arial, sans-serif" font-size="34" font-weight="700" fill="#0f172a">站点重复识别与深扫收敛逻辑图</text>
+  <text x="840" y="90" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, Arial, sans-serif" font-size="18" fill="#475569">先逐站探测与打标签，再按非业务响应页优先、标准入口其次的顺序做收敛</text>
+
+  <rect x="60" y="130" width="1560" height="180" class="panel"/>
+  <text x="90" y="172" class="panel-title">阶段一：输入与逐站探测</text>
+  <text x="90" y="198" class="panel-note">这一阶段解决“每个站点到底返回了什么”，为后续收敛提供证据。</text>
+
+  <rect x="110" y="215" width="220" height="70" class="box box-blue"/>
+  <text x="220" y="257" text-anchor="middle" class="box-title">输入站点文件</text>
+
+  <rect x="380" y="215" width="220" height="70" class="box box-blue"/>
+  <text x="490" y="257" text-anchor="middle" class="box-title">输入归一化</text>
+
+  <rect x="650" y="215" width="240" height="70" class="box box-blue"/>
+  <text x="770" y="257" text-anchor="middle" class="box-title">并发逐站探测</text>
+
+  <rect x="940" y="215" width="260" height="70" class="box box-blue"/>
+  <text x="1070" y="245" text-anchor="middle" class="box-title">提取页面特征</text>
+  <text x="1070" y="267" text-anchor="middle" class="box-text">状态码 标题 资源 正文摘要</text>
+
+  <rect x="1250" y="200" width="260" height="90" class="box box-blue"/>
+  <text x="1380" y="235" text-anchor="middle" class="box-title">探测关键路径</text>
+  <text x="1380" y="257" text-anchor="middle" class="box-text">robots favicon</text> 
+  <text x="1380" y="279" text-anchor="middle" class="box-text">sitemap well-known ...</text>
+
+  <line x1="330" y1="250" x2="380" y2="250" class="arrow"/>
+  <line x1="600" y1="250" x2="650" y2="250" class="arrow"/>
+  <line x1="890" y1="250" x2="940" y2="250" class="arrow"/>
+  <line x1="1200" y1="250" x2="1250" y2="250" class="arrow"/>
+
+  <rect x="60" y="320" width="1560" height="215" class="panel"/>
+  <text x="90" y="362" class="panel-title">阶段二：站点打标签</text>
+  <text x="90" y="388" class="panel-note">这一阶段不直接决定是否合并，而是先判断“这个入口属于哪一类页面”。</text>
+
+  <rect x="100" y="410" width="250" height="86" class="box box-red"/>
+  <text x="225" y="441" text-anchor="middle" class="box-title">噪音页识别</text>
+  <text x="225" y="464" text-anchor="middle" class="box-text">网关错误页 WAF 错误页</text>
+  <text x="225" y="485" text-anchor="middle" class="box-text">CDN 拦截页</text>
+
+  <rect x="390" y="410" width="250" height="86" class="box box-orange"/>
+  <text x="515" y="441" text-anchor="middle" class="box-title">默认页识别</text>
+  <text x="515" y="464" text-anchor="middle" class="box-text">默认欢迎页不直接归噪音</text>
+  <text x="515" y="485" text-anchor="middle" class="box-text">而是降级为低信息量</text>
+
+  <rect x="680" y="400" width="310" height="102" class="box box-purple"/>
+  <text x="835" y="431" text-anchor="middle" class="box-title">非业务响应页识别</text>
+  <text x="835" y="454" text-anchor="middle" class="box-text">维护页 统一拒绝访问页</text>
+  <text x="835" y="473" text-anchor="middle" class="box-text">统一认证响应页</text>
+  <text x="835" y="494" text-anchor="middle" class="box-text">低信息量响应页</text>
+
+  <rect x="1030" y="410" width="250" height="86" class="box box-green"/>
+  <text x="1155" y="441" text-anchor="middle" class="box-title">结构特征就绪判断</text>
+  <text x="1155" y="464" text-anchor="middle" class="box-text">是否具备进入标准合并的</text>
+  <text x="1155" y="485" text-anchor="middle" class="box-text">完整证据链</text>
+
+  <rect x="1320" y="400" width="250" height="102" class="box box-slate"/>
+  <text x="1445" y="431" text-anchor="middle" class="box-title">生成站点标签</text>
+  <text x="1445" y="452" text-anchor="middle" class="box-text">噪音 默认页 低信息量</text>
+  <text x="1445" y="473" text-anchor="middle" class="box-text">统一认证 拒绝访问</text>
+  <text x="1445" y="494" text-anchor="middle" class="box-text">可比较</text>
+
+  <line x1="1380" y1="285" x2="1380" y2="400" class="arrow"/>
+  <line x1="225" y1="490" x2="225" y2="565" class="arrow dashed"/>
+  <line x1="515" y1="490" x2="515" y2="565" class="arrow dashed"/>
+  <line x1="835" y1="490" x2="835" y2="565" class="arrow dashed"/>
+  <line x1="1155" y1="490" x2="1155" y2="565" class="arrow dashed"/>
+  <line x1="1445" y1="490" x2="1445" y2="565" class="arrow dashed"/>
+
+  <rect x="60" y="580" width="1560" height="500" class="panel"/>
+  <text x="90" y="620" class="panel-title">阶段三：统一收敛</text>
+  <text x="90" y="643" class="panel-note">先处理非业务响应页的重复入口，再处理标准业务入口的等价关系。</text>
+
+  <rect x="95" y="655" width="710" height="380" class="panel dashed"/>
+  <text x="125" y="695" class="panel-title">第一步：优先处理非业务响应页</text>
+  <text x="125" y="720" class="panel-note">这一步只处理统一拒绝访问页、统一认证响应页、低信息量响应页；</text>
+  <text x="125" y="740" class="panel-note">维护页等明确噪音已在前面直接剔除。</text>
+
+  <rect x="120" y="748" width="220" height="98" class="box box-purple"/>
+  <text x="230" y="776" text-anchor="middle" class="box-title">同一域名不同端口</text>
+  <text x="230" y="798" text-anchor="middle" class="box-text">完全一致的非业务响应页</text>
+  <text x="230" y="819" text-anchor="middle" class="box-text">按响应类型分流处理</text>
+
+  <rect x="435" y="748" width="320" height="98" class="box box-purple"/>
+  <text x="595" y="776" text-anchor="middle" class="box-title">同主域不同子域同端口</text>
+  <text x="595" y="798" text-anchor="middle" class="box-text">同 IP 且完全一致的非业务响应页</text>
+  <text x="595" y="819" text-anchor="middle" class="box-text">直接收敛为一个合并组</text>
+
+  <rect x="120" y="910" width="192" height="100" class="box box-red"/>
+  <text x="216" y="940" text-anchor="middle" class="box-title">统一拒绝访问页</text>
+  <text x="216" y="970" text-anchor="middle" class="box-text">仅在同域多端口场景</text>
+  <text x="216" y="990" text-anchor="middle" class="box-text">直接归为噪音</text>
+
+  <rect x="330" y="910" width="240" height="100" class="box box-green"/>
+  <text x="450" y="940" text-anchor="middle" class="box-title">统一认证或低信息量页</text>
+  <text x="450" y="970" text-anchor="middle" class="box-text">同域多端口场景</text>
+  <text x="450" y="990" text-anchor="middle" class="box-text">形成合并组</text>
+
+  <rect x="590" y="910" width="200" height="100" class="box box-green"/>
+  <text x="694" y="940" text-anchor="middle" class="box-title">同主域同端口同 IP</text>
+  <text x="694" y="970" text-anchor="middle" class="box-text">完全一致的统一拒绝访问页</text>
+  <text x="694" y="990" text-anchor="middle" class="box-text">统一认证页或低信息量页</text>
+
+  <path d="M230 846 L230 868 L216 868 L216 910" class="arrow"/>
+  <path d="M230 846 L230 868 L450 868 L450 910" class="arrow"/>
+  <path d="M595 846 L595 868 L674 868 L674 910" class="arrow"/>
+
+  <rect x="885" y="655" width="700" height="380" class="panel dashed"/>
+  <text x="915" y="695" class="panel-title">第二步：再处理标准入口合并</text>
+  <text x="915" y="720" class="panel-note">这里处理的是未被前面收敛、且具备比较证据的入口，而不是前面的非业务响应页。</text>
+
+  <rect x="925" y="748" width="220" height="98" class="box box-blue"/>
+  <text x="1035" y="781" text-anchor="middle" class="box-title">标准跳转合并</text>
+  <text x="1035" y="802" text-anchor="middle" class="box-text">同域名的</text>
+  <text x="1035" y="823" text-anchor="middle" class="box-text">HTTP 到 HTTPS</text>
+
+  <rect x="1180" y="748" width="220" height="98" class="box box-blue"/>
+  <text x="1290" y="781" text-anchor="middle" class="box-title">同一域名多端口</text>
+  <text x="1290" y="815" text-anchor="middle" class="box-text">五维完全一致</text>
+
+  <rect x="1435" y="748" width="130" height="98" class="box box-blue"/>
+  <text x="1500" y="781" text-anchor="middle" class="box-title">同主域子域</text>
+  <text x="1500" y="815" text-anchor="middle" class="box-text">五维完全一致</text>
+
+  <rect x="1085" y="910" width="390" height="100" class="box box-blue"/>
+  <text x="1280" y="940" text-anchor="middle" class="box-title">同 IP 跨主域强等价</text>
+  <text x="1280" y="970" text-anchor="middle" class="box-text">同 IP 同端口 同正文哈希</text>
+  <text x="1280" y="990" text-anchor="middle" class="box-text">同五维指纹</text>
+
+  <line x1="1145" y1="797" x2="1180" y2="797" class="arrow"/>
+  <line x1="1400" y1="797" x2="1435" y2="797" class="arrow"/>
+  <path d="M1500 846 L1500 868 L1280 868 L1280 910" class="arrow"/>
+
+  <line x1="795" y1="760" x2="885" y2="760" class="arrow"/>
+
+  <rect x="60" y="1090" width="1560" height="190" class="panel"/>
+  <text x="90" y="1132" class="panel-title">阶段四：输出结果</text>
+  <text x="90" y="1158" class="panel-note">所有规则最终沉淀为三类结果，供深扫执行和人工复核共同使用。</text>
+
+  <rect x="190" y="1192" width="320" height="72" class="box box-red"/>
+  <text x="350" y="1236" text-anchor="middle" class="box-title">噪音站点</text>
+
+  <rect x="680" y="1192" width="320" height="72" class="box box-green"/>
+  <text x="840" y="1236" text-anchor="middle" class="box-title">可合并站点组</text>
+
+  <rect x="1170" y="1192" width="320" height="72" class="box box-slate"/>
+  <text x="1330" y="1226" text-anchor="middle" class="box-title">独立站点</text>
+  <text x="1330" y="1248" text-anchor="middle" class="small-text">未命中噪音且未进入任何合并组的剩余入口</text>
+
+  <path d="M216 988 L216 1060 L350 1060 L350 1192" class="arrow"/>
+  <path d="M450 988 L450 1060 L840 1060 L840 1192" class="arrow"/>
+  <path d="M674 988 L674 1060 L840 1060 L840 1192" class="arrow"/>
+  <path d="M1280 988 L1280 1060 L840 1060 L840 1192" class="arrow"/>
+</svg>
