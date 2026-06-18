@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tophant/site-dedup-go/internal/fetcher"
-	"github.com/tophant/site-dedup-go/internal/parser"
-	"github.com/tophant/site-dedup-go/internal/rules"
+	"github.com/tophant/site-dedup-go/pkg/fetcher"
+	"github.com/tophant/site-dedup-go/pkg/parser"
+	"github.com/tophant/site-dedup-go/pkg/rules"
 	"github.com/tophant/site-dedup-go/pkg/types"
 )
 

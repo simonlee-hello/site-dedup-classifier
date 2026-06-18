@@ -8,8 +8,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tophant/site-dedup-go/internal/fetcher"
-	"github.com/tophant/site-dedup-go/internal/merger"
+	"github.com/tophant/site-dedup-go/pkg/fetcher"
+	"github.com/tophant/site-dedup-go/pkg/merger"
 	"github.com/tophant/site-dedup-go/pkg/types"
 )
 

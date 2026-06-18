@@ -52,10 +52,10 @@ import (
     "encoding/json"
     "fmt"
 
-    "github.com/tophant/site-dedup-go/internal/analyzer"
-    "github.com/tophant/site-dedup-go/internal/output"
-    "github.com/tophant/site-dedup-go/internal/rules"
-    "github.com/tophant/site-dedup-go/internal/parser"
+    "github.com/tophant/site-dedup-go/pkg/analyzer"
+    "github.com/tophant/site-dedup-go/pkg/output"
+    "github.com/tophant/site-dedup-go/pkg/rules"
+    "github.com/tophant/site-dedup-go/pkg/parser"
     "github.com/tophant/site-dedup-go/pkg/types"
 )
 

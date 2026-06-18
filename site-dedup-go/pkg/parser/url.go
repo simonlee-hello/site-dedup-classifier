@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tophant/site-dedup-go/internal/rules"
+	"github.com/tophant/site-dedup-go/pkg/rules"
 )
 
 // IPLiteral 检查是否为 IP 地址
