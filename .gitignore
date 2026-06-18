@@ -27,3 +27,6 @@ Thumbs.db
 *.tmp
 *.log
 /tmp/
+
+# Test data
+test/
