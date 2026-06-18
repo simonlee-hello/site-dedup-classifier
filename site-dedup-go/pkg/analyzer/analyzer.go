@@ -11,10 +11,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tophant/site-dedup-go/pkg/fetcher"
-	"github.com/tophant/site-dedup-go/pkg/parser"
-	"github.com/tophant/site-dedup-go/pkg/rules"
-	"github.com/tophant/site-dedup-go/pkg/types"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/fetcher"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/parser"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/rules"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/types"
 )
 
 // SHA256Hex 计算 SHA256
@@ -130,7 +130,7 @@ func DetectAuthShell(title string, bodyText string, finalURL string, formActions
 		parts = append(parts, title)
 	}
 	if len(bodyText) > 1200 {
-		parts = append(parts, bodyText[:1200])
+		parts = append(parts, bodyText[:min(1200, len(bodyText))])
 	} else if bodyText != "" {
 		parts = append(parts, bodyText)
 	}
@@ -379,7 +379,7 @@ func AnalyzeSite(site types.SiteInput, timeout float64, insecure bool, rules *ru
 	// 响应文本
 	responseText := parser.NormalizeText(string(finalResult.Body))
 	if len(responseText) > 4000 {
-		responseText = responseText[:4000]
+		responseText = responseText[:min(4000, len(responseText))]
 	}
 	analysis.ResponseTextExcerpt = responseText
 
@@ -410,7 +410,7 @@ func AnalyzeSite(site types.SiteInput, timeout float64, insecure bool, rules *ru
 	}
 
 	if len(bodyText) > 4000 {
-		analysis.BodyTextExcerpt = bodyText[:4000]
+		analysis.BodyTextExcerpt = bodyText[:min(4000, len(bodyText))]
 	} else {
 		analysis.BodyTextExcerpt = bodyText
 	}

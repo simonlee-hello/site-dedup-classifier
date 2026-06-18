@@ -1,4 +1,4 @@
-module github.com/tophant/site-dedup-go
+module github.com/simonlee-hello/site-dedup-classifier
 
 go 1.25.0
 

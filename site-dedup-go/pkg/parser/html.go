@@ -25,34 +25,61 @@ var htmlTagRe = regexp.MustCompile(`(?s)<[^>]+>`)
 var whitespaceRe = regexp.MustCompile(`\s+`)
 
 // removeScriptStyle 移除 script 和 style 标签
+// 使用 strings.EqualFold 进行大小写不敏感匹配，避免 ToLower 改变字节长度导致索引越界
 func removeScriptStyle(htmlStr string) string {
 	var result strings.Builder
-	lower := strings.ToLower(htmlStr)
 	i := 0
-	for i < len(htmlStr) {
-		scriptIdx := strings.Index(lower[i:], "<script")
-		styleIdx := strings.Index(lower[i:], "<style")
+	htmlLen := len(htmlStr)
+
+	for i < htmlLen {
+		// 在原始字符串中查找 <script 或 <style（大小写不敏感）
+		scriptIdx := -1
+		styleIdx := -1
+
+		// 逐字符搜索，用 EqualFold 做大小写不敏感匹配
+		for j := i; j < htmlLen-6; j++ {
+			if htmlStr[j] == '<' {
+				if scriptIdx < 0 && j+7 <= htmlLen && strings.EqualFold(htmlStr[j:j+7], "<script") {
+					scriptIdx = j - i
+				}
+				if styleIdx < 0 && j+6 <= htmlLen && strings.EqualFold(htmlStr[j:j+6], "<style") {
+					styleIdx = j - i
+				}
+				if scriptIdx >= 0 || styleIdx >= 0 {
+					break
+				}
+			}
+		}
 
 		var tagIdx int
-		var tagName string
-		if scriptIdx >= 0 && (styleIdx < 0 || scriptIdx < styleIdx) {
+		var endTag string
+		if scriptIdx >= 0 && (styleIdx < 0 || scriptIdx <= styleIdx) {
 			tagIdx = scriptIdx
-			tagName = "script"
+			endTag = "</script>"
 		} else if styleIdx >= 0 {
 			tagIdx = styleIdx
-			tagName = "style"
+			endTag = "</style>"
 		} else {
 			result.WriteString(htmlStr[i:])
 			break
 		}
 
 		result.WriteString(htmlStr[i : i+tagIdx])
-		endTag := "</" + tagName + ">"
-		endIdx := strings.Index(lower[i+tagIdx:], endTag)
+
+		// 查找闭合标签（大小写不敏感）
+		searchFrom := i + tagIdx
+		endIdx := -1
+		for j := searchFrom; j <= htmlLen-len(endTag); j++ {
+			if strings.EqualFold(htmlStr[j:j+len(endTag)], endTag) {
+				endIdx = j - searchFrom
+				break
+			}
+		}
+
 		if endIdx >= 0 {
-			i = i + tagIdx + endIdx + len(endTag)
+			i = searchFrom + endIdx + len(endTag)
 		} else {
-			i = len(htmlStr)
+			break
 		}
 	}
 	return result.String()

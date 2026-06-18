@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tophant/site-dedup-go/pkg/analyzer"
-	"github.com/tophant/site-dedup-go/pkg/output"
-	"github.com/tophant/site-dedup-go/pkg/parser"
-	"github.com/tophant/site-dedup-go/pkg/rules"
-	"github.com/tophant/site-dedup-go/pkg/types"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/analyzer"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/output"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/parser"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/rules"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/types"
 )
 
 func main() {

@@ -8,9 +8,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tophant/site-dedup-go/pkg/fetcher"
-	"github.com/tophant/site-dedup-go/pkg/merger"
-	"github.com/tophant/site-dedup-go/pkg/types"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/fetcher"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/merger"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/types"
 )
 
 // BuildOutput 构建输出结果

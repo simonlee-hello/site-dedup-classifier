@@ -7,7 +7,7 @@ import (
 
 	neturl "net/url"
 
-	"github.com/tophant/site-dedup-go/pkg/types"
+	"github.com/simonlee-hello/site-dedup-classifier/pkg/types"
 )
 
 // ChooseRepresentative 选择代表站点
