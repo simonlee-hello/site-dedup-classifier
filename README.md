@@ -203,8 +203,8 @@ python3 site_dedup_classifier.py -f sites.txt -o results.json --workers 50
 
 处理结果：
 
-- `deny_shell`：直接归为噪音，原因是 `同hostname多端口统一拒绝访问响应页`
-- `auth_api_shell` / `low_information_shell`：归为一个可合并组，只保留一个代表入口
+- `deny_shell`：直接归为噪音，原因是 `同hostname多端口统一拒绝访问响应页`（含 IP 字面量 hostname）
+- `auth_api_shell` / `low_information_shell`：归为一个可合并组，只保留一个代表入口；**IP 字面量作为 hostname 时同样适用**
 
 这里之所以可以对 `deny_shell` 更激进，是因为"同一 hostname 的多个端口"通常更像同一入口的重复暴露；如果这些端口只是重复返回同一套统一拒绝访问响应页，继续分别深扫的价值较低。
 
@@ -330,7 +330,7 @@ python3 site_dedup_classifier.py -f sites.txt -o results.json --workers 50
 
 - **强噪音规则**：只有命中 `detect_noise` 明确规则的页面，或 `maintenance_shell` 这类明确无业务价值的页面，才会直接剔除
 - **统一拒绝访问响应页不是天然噪音**：`deny_shell` 在同 `hostname` 多端口场景下会打成噪音，但在同主域不同子域同端口场景下只做收敛合并
-- **IP 直连入口**：默认不参与基于主域名或跨主域的自动收敛；但同一 IP 字面量下的多端口入口，如果五维特征完全一致，仍可能被识别为同一站点并合并
+- **IP 直连入口**：默认不参与基于主域名或跨主域的自动收敛；同一 IP 字面量下的多端口入口，若命中同 hostname 壳页且指纹一致，按场景 A 处理（`deny_shell` 打噪音，`auth_api_shell` / `low_information_shell` 收敛）；若五维特征完全一致，也可按场景 D 合并
 - **不同子域名 + 不同端口**：即使都返回 `403` / 默认页 / 低信息量页，也不自动处理
 - **跨主域非业务响应页**：当前不做自动非业务响应页收敛
 - **五维特征不足**：只要 `comparison_ready = false`，标准业务页就不进入五维等价合并

@@ -1388,8 +1388,6 @@ def collect_same_host_shell_results(
             continue
         if analysis.shell_type not in {"deny_shell", "auth_api_shell", "low_information_shell"}:
             continue
-        if analysis.site.is_ip:
-            continue
         key = (analysis.site.host, analysis.shell_merge_fingerprint)
         by_host_fingerprint.setdefault(key, []).append(url)
 

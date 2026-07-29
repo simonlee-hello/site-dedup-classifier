@@ -280,9 +280,6 @@ func CollectSameHostShellResults(analyses map[string]*types.SiteAnalysis, candid
 		if analysis.ShellType != "deny_shell" && analysis.ShellType != "auth_api_shell" && analysis.ShellType != "low_information_shell" {
 			continue
 		}
-		if analysis.Site.IsIP {
-			continue
-		}
 		key := hostFPKey{
 			Host: analysis.Site.Host,
 			FP:   fingerprintKey(analysis.ShellMergeFingerprint),
